@@ -6,7 +6,7 @@ class Player(BaseModel):
     MAX_JUMPS = 2
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.on_ground = True
+        self.on_ground = False
         self.jumps = 0
         self.direction = 0
 
@@ -45,9 +45,14 @@ class Player(BaseModel):
         if self.pos.x < 101 and self.vel.x < 0:
             self.pos.x = 100
             self.vel.x = 0
+            if left:
+                self.direction = -1
 
-        if self.pos.x > self.screen.get_width() - 100 and self.vel.x > 0:
+        if self.pos.x > self.screen.get_width() - 101 and self.vel.x > 0:
             self.pos.x = self.screen.get_width() - 100
+            self.vel.x = 0
+            if right:
+                self.direction = 1
 
         self.pos += self.vel * dt
         self.rect.center = self.pos

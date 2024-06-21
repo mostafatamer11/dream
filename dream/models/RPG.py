@@ -4,21 +4,24 @@ from .base import BaseModel
 class Player(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.direction = pg.Vector2(0, 0)
 
 
     def update(self, dt):
-        keys = pg.key.get_pressed()
-        self.vel = pg.Vector2(0, 0)
-        
-        if keys[pg.K_LEFT]:
+        up, down, left, right = super().update(dt)
+        if left:
             self.vel.x = -self.speed
-        if keys[pg.K_RIGHT]:
+        if right:
             self.vel.x = self.speed
-        if keys[pg.K_UP]:
+        if up:
             self.vel.y = -self.speed
-        if keys[pg.K_DOWN]:
+        if down:
             self.vel.y = self.speed
+            
+        if not (left or right):
+            self.vel.x = 0
+        if not (up or down):
+            self.vel.y = 0
 
-        self.pos += self.vel * dt
-        self.rect.center = self.pos
+
 
